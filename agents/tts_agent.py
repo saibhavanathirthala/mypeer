@@ -19,6 +19,8 @@ class TTSPromptAgent(BaseAgent):
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         # Initialize pygame mixer for audio playback
         pygame.mixer.init()
+        # Flag to stop TTS when interrupted
+        self._stop_tts = False
     
     def run(self, input_data: str) -> str:
         """
@@ -61,19 +63,29 @@ class TTSPromptAgent(BaseAgent):
             return input_data
     
     def _play_audio(self, file_path: str) -> None:
-        """Play audio file using pygame."""
+        """Play audio file using pygame with interruption handling."""
         try:
             pygame.mixer.music.load(file_path)
             pygame.mixer.music.play()
             
-            # Wait for playback to complete
-            while pygame.mixer.music.get_busy():
+            # Wait for playback to complete with interruption handling
+            while pygame.mixer.music.get_busy() and not self._stop_tts:
                 pygame.time.wait(100)
                 
+        except KeyboardInterrupt:
+            # Stop audio playback immediately on Ctrl+C
+            pygame.mixer.music.stop()
+            print("\n🔇 TTS interrupted by user")
         except Exception as e:
             self.log(f"Error playing audio: {str(e)}")
             # Just continue without audio playback
             pass
+    
+    def stop_tts(self):
+        """Stop TTS playback immediately."""
+        self._stop_tts = True
+        pygame.mixer.music.stop()
+        print("🔇 TTS stopped")
     
     def confirm_request(self, user_request: str) -> str:
         """

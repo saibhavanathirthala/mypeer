@@ -289,6 +289,60 @@ def validate_prompts():
     
     return True
 
+# =============================================================================
+# CODERABBIT CODE REVIEW PROMPTS
+# =============================================================================
+
+CODERABBIT_SUMMARIZATION_PROMPT = """
+Please summarize this CodeRabbit code review in 2-3 short sentences with natural filler sounds.
+Focus on the most critical issues that need immediate attention.
+Use filler sounds like "Um", "Hmm", "Oh" to make it sound natural.
+
+CodeRabbit Review Output:
+{review_output}
+
+Summary (with filler sounds):
+"""
+
+CODERABBIT_RATE_LIMIT_MESSAGE = "Um, sorry, I've hit the rate limit. Hmm, please wait a few minutes and try again."
+
+CODERABBIT_TIMEOUT_MESSAGE = "Um, the review is taking longer than expected. Hmm, please try again in a moment."
+
+CODERABBIT_START_MESSAGE = "Um, let me review your code using CodeRabbit. This might take a moment..."
+
+CODERABBIT_ERROR_MESSAGE = "Um, sorry, the code review failed. {error_message}"
+
+# =============================================================================
+# PROMPT VALIDATION
+# =============================================================================
+
+def validate_prompts():
+    """Validate that all required prompts are defined and non-empty."""
+    required_prompts = [
+        'INTENT_CLASSIFICATION_PROMPT',
+        'DISCUSSION_SYSTEM_PROMPT',
+        'CODE_EXPLANATION_PROMPT',
+        'CODE_REVIEW_PROMPT',
+        'CODE_OPTIMIZATION_PROMPT',
+        'CODE_DEBUG_PROMPT',
+        'TODO_SYSTEM_PROMPT',
+        'TODO_CREATION_PROMPT',
+        'WELCOME_MESSAGE',
+        'EXIT_MESSAGE',
+        'CODERABBIT_SUMMARIZATION_PROMPT',
+        'CODERABBIT_RATE_LIMIT_MESSAGE',
+        'CODERABBIT_TIMEOUT_MESSAGE',
+        'CODERABBIT_START_MESSAGE',
+        'CODERABBIT_ERROR_MESSAGE'
+    ]
+
+    for prompt_name in required_prompts:
+        prompt = globals().get(prompt_name)
+        if not prompt or not prompt.strip():
+            raise ValueError(f"Required prompt {prompt_name} is missing or empty")
+
+    return True
+
 # Validate prompts on import
 if __name__ != "__main__":
     validate_prompts()

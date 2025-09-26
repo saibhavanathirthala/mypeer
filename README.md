@@ -1,83 +1,56 @@
-# AI Pair Programming Multi-Agent Framework
+# MyPeer - AI Pair Programming Framework
 
-> **🚀 Enhanced Intelligent Version** - Now with smart intent detection, discussion mode, and file operations!
+A LangGraph-powered multi-agent system for voice-controlled pair programming with universal code generation and AI code review capabilities.
 
-An intelligent Python-based multi-agent system that provides AI pair programming capabilities using OpenAI's APIs. The framework features **smart intent detection** and **dynamic agent routing** to handle discussion, coding, and file operations through **100% voice interaction** with zero typing required.
+<div align="center">
+  <img src="https://avatars.githubusercontent.com/u/132028505?s=280&v=4" alt="CodeRabbit AI" width="200" height="100">
+  <p><em>Powered by CodeRabbit AI for intelligent code review</em></p>
+</div>
 
-## 🌟 Key Features
+## Key Features
 
-- **🧠 Smart Intent Detection**: Automatically understands whether you want to discuss, code, or manage files
-- **🎤 100% Voice Controlled**: Complete hands-free operation with automatic speech detection
-- **💬 Discussion Mode**: Ask programming questions and get detailed explanations
-- **💻 Coding Mode**: Generate code with intelligent planning and confirmations  
-- **📁 File Operations**: Open, read, and manage files through voice commands
-- **🔍 Code Analysis Mode**: Select any code and get explanations, reviews, optimizations, or debugging help
-- **🔄 Continuous Operation**: Keeps listening until you say "thank you Pair Programming"
-- **⚡ Dynamic Routing**: Intelligently routes requests to specialized agents
+- **Voice-Controlled Interface**: Complete hands-free operation with wake-up word detection
+- **Universal Code Generation**: Supports 20+ programming languages including Python, JavaScript, Java, C++, Go, Rust, and more
+- **AI Code Review**: Integrated CodeRabbit AI for automated code analysis and feedback
+- **Intent Classification**: Smart routing between coding, discussion, file operations, and code analysis
+- **Continuous Sessions**: Persistent voice sessions with session management
+- **Multi-Modal Workflow**: Seamless integration of speech-to-text, text-to-speech, and code generation
 
-## 🧠 Intelligent Agents
+## Architecture
 
-### Core Agents
+### Core Components
 
-#### 1. Speech-to-Text Agent (STTAgent)
-- Uses OpenAI Whisper API with **automatic voice activity detection**
-- **Zero typing required** - starts recording when you speak, stops when you're silent
-- Handles continuous listening for hands-free operation
+**LangGraph Pipeline**: Orchestrates the complete voice-to-code workflow using state management and agent coordination.
 
-#### 2. Text-to-Speech Agent (TTSPromptAgent)  
-- Uses OpenAI TTS API for natural voice feedback
-- Provides confirmations and responses through speech
-- Supports continuous voice conversations
+**Voice Interface**: 
+- Wake-up word detection ("Blueberry") for session initiation
+- Continuous voice input capture with silence detection
+- Speech-to-text conversion using OpenAI Whisper
+- Text-to-speech responses for natural interaction
 
-#### 3. Intent Classification Agent (IntentAgent) ⭐ **NEW**
-- Uses GPT-4 to **intelligently understand** your voice commands
-- Automatically detects whether you want to:
-  - **Ask questions** (Discussion Mode)
-  - **Write code** (Coding Mode) 
-  - **Manage files** (File Operations Mode)
-- Routes requests to appropriate specialized agents
+**Agent System**:
+- **Intent Agent**: Classifies user requests (coding, discussion, file operations, code analysis)
+- **Discussion Agent**: Handles programming questions and explanations
+- **Code Analysis Agent**: Reviews and explains existing code
+- **File Agent**: Manages file operations and workspace navigation
+- **Python Agent**: Generates Python code with best practices
+- **CodeRabbit Agent**: Provides AI-powered code review and feedback
 
-### Specialized Agents
+**Universal Code Generation**: Supports 20+ programming languages with automatic file extension detection and language-specific optimizations.
 
-#### 4. Discussion Agent (DiscussionAgent) ⭐ **NEW**
-- Handles programming questions and explanations
-- Provides conversational responses optimized for voice
-- Explains concepts, algorithms, and best practices
-
-#### 5. File Operations Agent (FileAgent) ⭐ **NEW**
-- Opens files in your default editor by voice command
-- Reads and presents file contents through speech
-- Lists directory contents and manages workspace files
-
-#### 6. Code Analysis Agent (CodeAnalysisAgent) ⭐ **NEW**
-- Explains what any code does in plain English
-- Reviews code and suggests improvements
-- Provides optimization recommendations
-- Analyzes code for potential bugs and issues
-- Supports multiple programming languages with auto-detection
-
-#### 7. To-do List Agent (TodoAgent)
-- Converts coding requests into structured action plans
-- Used specifically in Coding Mode for complex projects
-- Breaks down tasks into implementable steps
-
-#### 8. Python Code Agent (PythonAgent)
-- Generates clean, documented Python code
-- Includes validation, error handling, and type hints
-- Saves code to `pair_program.py` with timestamp
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.8+
 - OpenAI API key
+- Porcupine API key (optional, for wake-up word detection)
 
 ### Installation
 
 1. **Clone the repository:**
    ```bash
    git clone <repository-url>
-   cd hacakthon-multi-agent
+   cd mypeer
    ```
 
 2. **Install dependencies:**
@@ -85,326 +58,269 @@ An intelligent Python-based multi-agent system that provides AI pair programming
    pip install -r requirements.txt
    ```
 
-3. **Set up your OpenAI API key:**
+3. **Set up environment variables:**
    ```bash
-   cp .env.template .env
-   # Edit .env and add your OpenAI API key
+   # Create .env file with:
+   OPENAI_API_KEY=your_openai_api_key
+   PORCUPINE_ACCESS_KEY=your_porcupine_key  # Optional
    ```
 
 ### Usage
 
-#### Simple One-Command Start
 ```bash
-python main.py
+python main_langgraph.py
 ```
 
-That's it! The system will:
-1. 🗣️ **Welcome you** with voice instructions
-2. 🎧 **Listen continuously** for your voice commands  
-3. 🧠 **Automatically detect** your intent
-4. 🔄 **Route to the appropriate mode**:
-   - **Discussion**: Answer questions and explain concepts
-   - **Coding**: Generate code with confirmations
-   - **File Operations**: Open and manage files
-   - **Code Analysis**: Explain, review, or debug existing code
+The system will:
+1. Initialize the LangGraph voice pipeline
+2. Wait for wake-up word "Blueberry" to start a session
+3. Capture voice input and convert to text
+4. Classify intent and route to appropriate agent
+5. Generate code or provide responses
+6. Continue listening for additional requests
 
-#### Voice Commands Examples
+## Setup Guide
 
-| **What You Say** | **Mode Activated** | **What Happens** |
-|-----------------|------------------|------------------|
-| *"What is recursion?"* | 💬 Discussion | Explains programming concepts |
-| *"How does bubble sort work?"* | 💬 Discussion | Discusses algorithms |
-| *"Create a sorting function"* | 💻 Coding | Generates code with confirmations |
-| *"Build me a REST API"* | 💻 Coding | Creates structured code project |
-| *"Open main.py"* | 📁 File Ops | Opens file in your editor |
-| *"Show me config.py"* | 📁 File Ops | Reads file contents aloud |
-| *"Explain this code"* | 🔍 Code Analysis | Explains copied code in detail |
-| *"Review my function"* | 🔍 Code Analysis | Provides code review and suggestions |
-| *"Debug this code"* | 🔍 Code Analysis | Analyzes for bugs and issues |
-| *"Thank you Pair Programming"* | 👋 Exit | Ends the session gracefully |
+### 1. Environment Setup
 
-## 🔄 Intelligent Workflow
+Create a `.env` file in the project root:
+```bash
+# Required
+OPENAI_API_KEY=your_openai_api_key_here
 
-The framework uses **smart intent detection** and **dynamic routing**:
-
-### Universal Flow
-1. **🎧 Voice Input** → STT Agent captures your speech automatically
-2. **🧠 Intent Detection** → Intent Agent analyzes and classifies your request  
-3. **🎯 Smart Routing** → System routes to the appropriate mode
-
-### Mode-Specific Workflows
-
-#### 💬 Discussion Mode
-- **Discussion Agent** → Generates informative response
-- **TTS Agent** → Speaks answer back to you
-- **🔄 Continue** → Ready for next request
-
-#### 💻 Coding Mode  
-- **TTS Agent** → Confirms coding request
-- **Todo Agent** → Creates structured plan (if complex)
-- **Python Agent** → Generates and validates code
-- **TTS Agent** → Announces completion
-- **🔄 Continue** → Ready for next request
-
-#### 📁 File Operations Mode
-- **File Agent** → Executes file operation (open/read/list)
-- **TTS Agent** → Reports results
-- **🔄 Continue** → Ready for next request
-
-### Key Features
-- **🎤 Zero Typing**: Everything is voice-controlled
-- **🧠 Context Aware**: Understands natural language
-- **🔄 Continuous**: Keeps listening until you say "thank you Pair Programming"
-- **⚡ Fast**: Direct routing to appropriate agents
-
-## 📁 Project Structure
-
-```
-hacakthon-multi-agent/
-├── agents/
-│   ├── __init__.py
-│   ├── base_agent.py          # Abstract base class
-│   ├── stt_agent.py           # Speech-to-Text with voice detection
-│   ├── tts_agent.py           # Text-to-Speech responses
-│   ├── intent_agent.py        # ⭐ Intent classification & routing
-│   ├── discussion_agent.py    # ⭐ Question answering & explanations  
-│   ├── file_agent.py          # ⭐ File operations & management
-│   ├── todo_agent.py          # To-do list generation (coding mode)
-│   └── python_agent.py        # Python code generation
-├── main.py                    # Intelligent orchestrator with dynamic routing
-├── requirements.txt           # Dependencies (includes voice detection libs)
-├── .env.template             # Environment variables template
-├── pair_program.py           # Generated code output
-└── README.md                 # This file
+# Optional (for wake-up word detection)
+PORCUPINE_ACCESS_KEY=your_porcupine_key_here
 ```
 
-## 🎯 Example Sessions
+### 2. Install Dependencies
 
-### 💬 Discussion Mode Example
-```
-🤖 AI Pair Programming Framework - INTELLIGENT VOICE
-🎧 Listening for your next request...
-📝 Understood: 'What is the difference between recursion and iteration?'
+```bash
+# Install Python dependencies
+pip install -r requirements.txt
 
-🧠 Analyzing your request...
-🎯 Detected intent: discussion (confidence: 0.95)
-💬 Discussion Mode: User wants explanation
+# For macOS users (if you encounter audio issues)
+brew install portaudio
 
-[TTS] Recursion and iteration are both ways to repeat operations, but they work differently. 
-      Recursion calls itself with smaller problems, while iteration uses loops. 
-      Recursion is elegant for tree-like problems, but iteration is usually more memory efficient...
-
-✅ Discussion completed
-------------------------------------------------------------
+# For Linux users (if you encounter audio issues)
+sudo apt-get install libasound2-dev
 ```
 
-### 💻 Coding Mode Example  
-```
-🎧 Listening for your next request...
-📝 Understood: 'Create a binary search function'
+### 3. Test Audio Setup
 
-🧠 Analyzing your request...
-🎯 Detected intent: coding (confidence: 0.92)
-💻 Coding Mode: User wants code generation
+```bash
+# Test microphone access
+python -c "import sounddevice; print('Microphone detected:', sounddevice.query_devices())"
 
-🔄 Confirming coding request...
-[TTS] So you are asking me to Create a binary search function, am I correct?
-🎧 Say 'yes' or 'no' when ready...
-📝 Transcribed: 'Yes, that's correct'
-
-📋 Creating your coding plan...
-⚡ Generating your code...
-[TTS] Perfect! I've generated your code and saved it to pair_program.py. The code is ready to run!
-
-✅ Code generated: /path/to/pair_program.py
-------------------------------------------------------------
+# Test audio playback
+python -c "import pygame; pygame.mixer.init(); print('Audio system ready')"
 ```
 
-### 📁 File Operations Example
-```
-🎧 Listening for your next request...
-📝 Understood: 'Open the main.py file'
+## How to Use
 
-🧠 Analyzing your request...
-🎯 Detected intent: file_operations (confidence: 0.88)
-📁 File Operations Mode: User wants file management
+### Starting a Session
 
-[TTS] Successfully opened main.py in your default editor.
-
-✅ File operation completed
-------------------------------------------------------------
-```
-
-## 🔧 Configuration
-
-### Environment Variables
-- `OPENAI_API_KEY`: Your OpenAI API key (required)
-
-### Agent Configuration
-Each agent can be configured via the config dictionary:
-
-```python
-# Example: Custom output file for Python agent
-python_agent = PythonAgent(config={'output_file': 'my_code.py'})
-```
-
-## 🎨 Extensibility
-
-The framework is designed for easy extension. To add new agents:
-
-1. **Inherit from BaseAgent:**
-   ```python
-   from agents.base_agent import BaseAgent
-   
-   class DebugAgent(BaseAgent):
-       def run(self, input_data):
-           # Your implementation
-           pass
+1. **Run the application:**
+   ```bash
+   python main_langgraph.py
    ```
 
-2. **Add to orchestrator workflow**
-3. **Update `agents/__init__.py`**
+2. **Wait for wake-up word:** Say "Blueberry" to activate the system
 
-### Suggested Extensions
-- **DebugAgent**: Automated debugging assistance
-- **TestingAgent**: Generate unit tests
-- **DocumentationAgent**: Create code documentation
-- **RefactorAgent**: Code refactoring suggestions
+3. **Speak your request:** The system will capture your voice automatically
 
-## 🛠️ Technical Details
+4. **Confirm understanding:** The system will repeat what it heard and ask for confirmation
 
-### Dependencies
-- `openai>=1.0.0`: OpenAI API client (Whisper, GPT-4, TTS)
-- `pygame>=2.5.0`: Audio playback for TTS
-- `sounddevice>=0.5.0`: Microphone recording for voice input
-- `scipy>=1.10.0`: Audio processing for voice detection
-- `webrtcvad>=2.0.10`: Voice activity detection for automatic recording
-- `numpy>=1.20.0`: Numerical processing for audio data
-- `python-dotenv>=1.0.0`: Environment variable management
+5. **Get results:** Receive code generation, explanations, or file operations
 
-### API Usage
-- **Whisper API**: Real-time speech-to-text transcription with voice activity detection
-- **GPT-4**: 
-  - Intent classification and request routing
-  - Programming question answers and explanations
-  - To-do list generation for coding projects
-  - Python code generation with best practices
-- **TTS API**: Natural voice synthesis for responses and confirmations
+### Voice Commands
 
-### Voice Features
-- **Automatic Voice Detection**: Starts recording when you speak
-- **Silence Detection**: Stops recording after 1.5 seconds of silence  
-- **Continuous Listening**: No need to press buttons or type
-- **Natural Language**: Understands conversational requests
-- **Multi-Modal**: Seamlessly switches between discussion, coding, and file operations
+| **Intent** | **Example Commands** | **Expected Output** |
+|------------|---------------------|-------------------|
+| **Code Generation** | "Create a binary search function" | Generated code file with documentation |
+| **Code Review** | "Review my code" | CodeRabbit AI analysis with suggestions |
+| **Discussion** | "What is recursion?" | Detailed explanation with examples |
+| **File Operations** | "Open main.py" | File opened in default editor |
+| **Code Analysis** | "Explain this function" | Code explanation and documentation |
 
-## ⭐ What Makes This Special
+### Session Management
 
-### 🧠 Intelligent Intent Detection
-Unlike simple voice assistants, this framework **understands context** and automatically routes your requests to the right specialized agent. No need to specify modes or commands - just speak naturally.
+- **Continue Session:** Say "yes" when asked for more help
+- **End Session:** Say "I don't want any help" to end current session
+- **New Session:** Say "Blueberry" to start a new session
 
-### 🎤 True Zero-Typing Experience  
-Complete hands-free operation with:
-- **Automatic speech detection** (no button pressing)
-- **Voice confirmations** (speak "yes" or "no")
-- **Spoken responses** (hear answers, not just text)
-- **Smart exit phrase** ("thank you Pair Programming")
+## Expected Outputs
 
-### 🔄 Three Integrated Modes
-1. **💬 Discussion**: Ask programming questions, get explanations
-2. **💻 Coding**: Generate code with intelligent planning
-3. **📁 File Operations**: Manage your workspace by voice
+### Code Generation Output
 
-### 🚀 Production Ready
-- **Robust error handling** with graceful fallbacks
-- **Code validation** ensures generated code runs
-- **Modular architecture** for easy extension
-- **Professional documentation** and type hints
+When you request code generation, the system will:
 
-## 🤝 Contributing
+1. **Confirm the request** via voice
+2. **Generate the code** with proper documentation
+3. **Save to file** (e.g., `pair_program.py`)
+4. **Announce completion** via voice
+5. **Ask for additional help**
 
-1. Fork the repository
-2. Create a feature branch
-3. Add your improvements
-4. Submit a pull request
-
-## 📄 License
-
-This project is open source and available under the MIT License.
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**"OPENAI_API_KEY not found"**
-- Ensure you've created a `.env` file with your API key
-- Verify the key is valid and has sufficient credits
-- Alternative: Set environment variable: `export OPENAI_API_KEY="your_key"`
-
-**Audio/Voice Issues**
-- **No microphone detected**: Check system permissions for microphone access
-- **Audio playback problems**: Install pygame: `pip install pygame`
-- **Voice detection not working**: Install voice dependencies: `pip install sounddevice webrtcvad scipy`
-- **On macOS**: You may need: `brew install portaudio` for sounddevice
-- **On Linux**: Install ALSA development headers: `sudo apt-get install libasound2-dev`
-
-**Import/Installation Errors**
-- **ModuleNotFoundError**: Ensure all requirements installed: `pip install -r requirements.txt`
-- **Permission errors**: Try with user install: `pip install --user -r requirements.txt`
-- **Version conflicts**: Use virtual environment: `python -m venv venv && source venv/bin/activate`
-
-**Voice Recognition Issues**
-- **Low confidence detection**: Speak clearly and closer to microphone
-- **Background noise**: Use in quiet environment for better voice detection
-- **Wrong intent detected**: Try rephrasing your request more explicitly
-- **Not responding to voice**: Check if `webrtcvad` installed correctly
-
-**Performance Issues**
-- **Slow responses**: Ensure stable internet connection for OpenAI API calls
-- **Memory usage**: Voice detection libraries may use more RAM than expected
-- **API timeouts**: Check OpenAI API status and rate limits
-
-## 🎉 Demo Output
-
-The framework generates clean, documented Python code. Example output for factorial:
-
+Example generated code:
 ```python
 """
-Generated by AI Pair Programming Multi-Agent Framework
+Generated by MyPeer AI Pair Programming Framework
 File: pair_program.py
-Generated at: 2025-09-26 10:30:00
+Generated at: 2024-01-15 10:30:00
 """
 
-def factorial(n: int) -> int:
+def binary_search(arr, target):
     """
-    Calculate the factorial of a number using recursion.
+    Perform binary search on a sorted array.
     
     Args:
-        n: Non-negative integer to calculate factorial for
+        arr: Sorted list of integers
+        target: Value to search for
         
     Returns:
-        The factorial of n
-        
-    Raises:
-        ValueError: If n is negative
-        TypeError: If n is not an integer
+        Index of target if found, -1 otherwise
     """
-    if not isinstance(n, int):
-        raise TypeError("Input must be an integer")
+    left, right = 0, len(arr) - 1
     
-    if n < 0:
-        raise ValueError("Factorial is not defined for negative numbers")
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
     
-    # Base case
-    if n <= 1:
-        return 1
-    
-    # Recursive case  
-    return n * factorial(n - 1)
-
+    return -1
 
 if __name__ == "__main__":
     # Example usage
-    print(f"factorial(5) = {factorial(5)}")  # Output: 120
-    print(f"factorial(0) = {factorial(0)}")  # Output: 1
+    numbers = [1, 3, 5, 7, 9, 11, 13]
+    result = binary_search(numbers, 7)
+    print(f"Found at index: {result}")
 ```
+
+### CodeRabbit AI Review Output
+
+When you request code review:
+
+1. **Voice confirmation:** "I'll review your code using CodeRabbit AI"
+2. **Analysis processing:** CodeRabbit analyzes the code
+3. **Voice feedback:** Spoken summary of findings
+4. **Detailed report:** Written analysis with suggestions
+
+Example review output:
+```
+CodeRabbit AI Review Summary:
+- Code Quality: Good (8.5/10)
+- Issues Found: 2 minor suggestions
+- Performance: Optimal for the use case
+- Documentation: Well documented
+- Security: No security concerns
+
+Suggestions:
+1. Consider adding type hints for better code clarity
+2. Add input validation for edge cases
+```
+
+### Discussion Mode Output
+
+For programming questions:
+
+1. **Voice response:** Detailed explanation
+2. **Examples:** Code examples when relevant
+3. **Best practices:** Additional insights
+4. **Follow-up:** Opportunity to ask related questions
+
+### File Operations Output
+
+For file operations:
+
+1. **Confirmation:** "Opening main.py in your default editor"
+2. **Action performed:** File opened/read/listed
+3. **Status update:** Success/failure notification
+4. **Content display:** File contents read aloud (if requested)
+
+## Supported Languages
+
+**Programming Languages**: Python, JavaScript, Java, C++, C#, Go, Rust, PHP, Ruby, Swift, Kotlin, TypeScript
+
+**Web Technologies**: HTML, CSS, SQL
+
+**Scripting & Configuration**: Bash, PowerShell, YAML, JSON, XML
+
+## Voice Commands
+
+| **Command** | **Action** |
+|-------------|------------|
+| "Create a sorting function" | Generates code in detected language |
+| "What is recursion?" | Provides programming explanations |
+| "Open main.py" | File operations and navigation |
+| "Review my code" | CodeRabbit AI code review |
+| "Explain this function" | Code analysis and explanation |
+| "I don't want any help" | End current session |
+
+## Workflow
+
+1. **Wake-up Detection**: System waits for "Blueberry" wake-up word
+2. **Voice Input**: Captures speech with automatic silence detection
+3. **Speech-to-Text**: Converts voice to text using OpenAI Whisper
+4. **Intent Classification**: Determines user intent (coding, discussion, file ops, analysis)
+5. **Agent Routing**: Routes to appropriate specialized agent
+6. **Response Generation**: Generates code, explanations, or performs operations
+7. **Voice Feedback**: Provides spoken responses via text-to-speech
+8. **Session Continuation**: Asks for additional help or ends session
+
+## Project Structure
+
+```
+mypeer/
+├── agents/
+│   ├── base_agent.py          # Abstract base class for all agents
+│   ├── stt_agent.py           # Speech-to-text with voice detection
+│   ├── tts_agent.py           # Text-to-speech responses
+│   ├── intent_agent.py        # Intent classification and routing
+│   ├── discussion_agent.py    # Programming Q&A and explanations
+│   ├── file_agent.py          # File operations and workspace management
+│   ├── code_analysis_agent.py # Code review and analysis
+│   ├── coderabbit_agent.py    # AI code review integration
+│   ├── python_agent.py        # Python code generation
+│   └── todo_agent.py          # Task planning and organization
+├── langgraph_pipeline.py      # Main LangGraph orchestration
+├── main_langgraph.py          # Entry point for the application
+├── prompts.py                 # Centralized prompt templates
+├── requirements.txt           # Python dependencies
+└── README.md                  # This file
+```
+
+## Key Technologies
+
+- **LangGraph**: State management and agent orchestration
+- **OpenAI APIs**: GPT-4, Whisper (STT), TTS for natural language processing
+- **Porcupine**: Wake-up word detection for hands-free activation
+- **WebRTC VAD**: Voice activity detection for automatic recording
+- **CodeRabbit AI**: Integrated code review and analysis
+
+## Configuration
+
+### Environment Variables
+- `OPENAI_API_KEY`: Required for OpenAI API access
+- `PORCUPINE_ACCESS_KEY`: Optional for wake-up word detection
+
+### Dependencies
+- OpenAI API for language models and speech processing
+- LangGraph for workflow orchestration
+- Porcupine for wake-up word detection
+- WebRTC VAD for voice activity detection
+
+## Collaborators
+
+<div align="center">
+  <img src="https://avatars.githubusercontent.com/u/132028505?s=280&v=4" alt="CodeRabbit AI" width="150" height="75">
+</div>
+
+**CodeRabbit AI** - Integrated AI code review and analysis system that provides automated code quality assessment, bug detection, and improvement suggestions within the pipeline workflow.
+
+**Contributors** - Bhavana, Venkatachalam
+## License
+
+This project is open source and available under the MIT License.

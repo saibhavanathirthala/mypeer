@@ -47,7 +47,7 @@ class STTAgent(BaseAgent):
         self.frame_size = int(self.sample_rate * self.frame_duration / 1000)
         
         # Speech detection settings
-        self.silence_threshold = 1  # seconds of silence to stop recording
+        self.silence_threshold = 1.5  # seconds of silence to stop recording
         self.min_speech_duration = 0.5  # minimum seconds of speech to consider valid
         self.listening = False
         
