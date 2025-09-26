@@ -1,6 +1,6 @@
 # MyPeer - AI Pair Programming Framework
 
-# Move over BlackBerry, BlueBerry is the new tech fruit!"
+## Move over BlackBerry, BlueBerry is the new tech fruit!"
 
 A LangGraph-powered multi-agent system for voice-controlled pair programming with universal code generation and AI code review capabilities.
 
